@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0eea5731c4709b945b2d1134e186dcaf, type: 3}
+  m_Name: Blue Heavy Enemy 1
+  m_EditorClassIdentifier: 
+  color: {r: 1, g: 0.04082808, b: 0, a: 0.72156864}
+  spriteScale: {x: 3, y: 3}
+  animations: {fileID: 9100000, guid: 1ff8ebc014b3fe343804c55c69029cb7, type: 2}
+  moveSpeed: 0.7
+  hp: 60
+  score: 0
+  radius: 0.27
+  damage: 3
+  gold: 15
