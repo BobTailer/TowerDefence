@@ -17,7 +17,7 @@ namespace TowerDefence
             OnGoldUpdate += act;
             act(Instance.m_gold);
         }
-        private static event Action<int> OnLifeUpdate;
+        public static event Action<int> OnLifeUpdate;
         public static void LifeUpdateSubscribe(Action<int> act)
         {
             OnLifeUpdate += act;
@@ -46,6 +46,20 @@ namespace TowerDefence
             var tower = Instantiate(m_towerPrefab, buildSide.position, Quaternion.identity);
             tower.GetComponentInChildren<SpriteRenderer>().sprite = towerAsset.sprite;
             Destroy(buildSide.gameObject);
+        }
+
+        [SerializeField] private UpgradeAsset healthUpgrade;
+        private new void Awake()
+        {
+            base.Awake();
+            var level = Upgrades.GetUpgradeLevel(healthUpgrade);
+            TakeDamage(-level * 5);
+        }
+
+        private void OnDestroy()
+        {
+            OnGoldUpdate = null;
+            OnLifeUpdate = null;
         }
     }
 }

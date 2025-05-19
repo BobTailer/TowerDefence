@@ -8,29 +8,24 @@ namespace TowerDefence
 {
     public class MapComlition : MonoSingleton<MapComlition>
     {
+        public const string fileName = "complition.dat";
+
         [Serializable]
         private class EpisodeScore
         {
             public Episode episode;
             public int score;
         }
+
         public static void SaveEpisodeResult(int levelScore)
         {
-            Instance.SaveResult(LevelSequenceController.Instance.CurrentEpisode, levelScore);
-        }
-        [SerializeField] private EpisodeScore[] complitionData;
-        public bool TryIndex(int id, out Episode episode, out int score)
-        {
-            if (id >= 0 && id < complitionData.Length)
+            if (Instance)
             {
-                episode = complitionData[id].episode;
-                score = complitionData[id].score;
-
-                return true;
+                Instance.SaveResult(LevelSequenceController.Instance.CurrentEpisode, levelScore);
+            } else
+            {
+                Debug.Log($"Episode complete with score {levelScore}");
             }
-            episode = null;
-            score = 0;
-            return false;
         }
 
         private void SaveResult(Episode currentEpisode, int levelScore)
@@ -39,9 +34,40 @@ namespace TowerDefence
             {
                 if (item.episode == currentEpisode)
                 {
-                    if (levelScore > item.score) item.score = levelScore;
+                    if (levelScore > item.score)
+                    {
+                        totalScore += levelScore - item.score;
+                        item.score = levelScore;
+                        Saver<EpisodeScore[]>.Save(fileName, complitionData);
+                    }
                 }
             }
+        }
+
+        [SerializeField] private EpisodeScore[] complitionData;
+        private int totalScore;
+        public int TotalScore {get {return totalScore;} }
+
+        private new void Awake()
+        {
+            base.Awake();
+            Saver<EpisodeScore[]>.TryLoad(fileName, ref complitionData);
+            foreach (var episodeScore in complitionData)
+            {
+                totalScore += episodeScore.score;
+            }
+        }
+
+        public int GetEpisodeScore(Episode m_episode)
+        {
+            foreach (var data in complitionData)
+            {
+                if (data.episode == m_episode)
+                {
+                    return data.score;
+                }
+            }
+            return 0;
         }
     }
 }

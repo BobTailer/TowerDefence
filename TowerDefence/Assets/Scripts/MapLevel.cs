@@ -3,13 +3,19 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using SpaceShooter;
+using System;
+using UnityEngine.SocialPlatforms.Impl;
 
 namespace TowerDefence
 {
     public class MapLevel : MonoBehaviour
     {
-        private Episode m_episode;
-        [SerializeField] private Text text;
+        [SerializeField] private Episode m_episode;
+
+        //[SerializeField] private RectTransform resultPanel;
+        [SerializeField] private Image[] resultImages;
+
+        public bool IsComplete { get { return gameObject.activeSelf && resultImages[0].color == Color.white; } }
 
         public void LoadLevel()
         {
@@ -19,10 +25,13 @@ namespace TowerDefence
             }
         }
 
-        public void SetLevelData(Episode episode, int score)
+        public void Initialize()
         {
-            m_episode = episode;
-            text.text = $"{score}/3";
+             var score = MapComlition.Instance.GetEpisodeScore(m_episode);
+             for (int i = 0; i < score; i++)
+             {
+                 resultImages[i].color = Color.white;
+             }
         }
     }
 }
